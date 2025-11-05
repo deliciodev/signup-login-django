@@ -1,20 +1,55 @@
 import uuid
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.utils import timezone
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
-class Customer(AbstractBaseUser):
+
+class CustomerManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email is required')
+        email = self.normalize_email(email)
+        username = extra_fields.get("username")
+        if not username:
+            raise ValueError("The Username is required")
+        user = self.model(email=email, username=username, **extra_fields)
+        if not password:
+            raise ValueError("The Password is required")
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+    
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault("username", email.split('@')[0])
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
+        if not password:
+            raise ValueError("Superuser must have a password.")
+        return self.create_user(email, password, **extra_fields)
+
+class Customer(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=25, unique=True)
-    name = models.CharField(max_length=255)
-    password = models.CharField(max_length=128)
+    name = models.CharField(max_length=255, blank=True)
+    
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'name']
+    objects = CustomerManager()
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username", "name"]
     class Meta:
-        verbose_name_plural = 'Customers'
+        verbose_name = "Customer"
+        verbose_name_plural = "Customers"
 
     def __str__(self):
         return self.name
+    
+    def get_name(self):
+        return f"{self.name}"
+
