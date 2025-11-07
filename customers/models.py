@@ -7,25 +7,36 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 class CustomerManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
-            raise ValueError('The Email is required')
-        email = self.normalize_email(email)
-        username = extra_fields.get("username")
-        if not username:
-            raise ValueError("The Username is required")
-        user = self.model(email=email, username=username, **extra_fields)
+            raise ValueError("The Email is required")
         if not password:
             raise ValueError("The Password is required")
+
+        email = self.normalize_email(email)
+
+        username = extra_fields.pop("username", None)
+        if not username:
+            raise ValueError("The Username is required")
+
+        user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
     
     def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault("username", email.split('@')[0])
+        # Provide a default username if not supplied
+        extra_fields.setdefault("username", (email or "").split("@")[0] or "admin")
+
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
         if not password:
             raise ValueError("Superuser must have a password.")
+
         return self.create_user(email, password, **extra_fields)
 
 class Customer(AbstractBaseUser, PermissionsMixin):

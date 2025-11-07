@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 
 Customer = get_user_model()
 
-class EmailOrUsernameBackend(ModelBackend):
+class EmailOrUsernameModelBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
         
         identifier = username or kwargs.get('email') or kwargs.get('username')

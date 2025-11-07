@@ -10,7 +10,6 @@ class CustomerAdmin(BaseUserAdmin):
 
     fieldsets = (
         (None, {"fields": ("email", "username", "name", "password")}),
-        ("Personal info", {"fields": ("email", "username", "name")}),
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
         ("Important dates", {"fields": ("last_login", "created_at")}),
     )
