@@ -10,7 +10,6 @@ SECRET_KEY = 'django-insecure-i7=()!b%h7*f7-dgma-p*&@&%o)uzj$fquc+2c+_a0m2k3ou&k
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -126,7 +125,7 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
-    "ROTATE_REFRESH_TOKENS": False,
+    "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ('Bearer',),
     "UPATE_LAST_LOGIN": True,
@@ -139,3 +138,9 @@ CORS_ALLOW_ALL_ORIGINS = [
 ]
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
+
+#Auth backends - allow login with email or username
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "customers.backends.EmailOrUsernameModelBackend",
+]
