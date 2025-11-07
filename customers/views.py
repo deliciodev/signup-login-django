@@ -68,4 +68,13 @@ class CustomerProfileView(generics.RetrieveUpdateDestroyAPIView):
 class JWTTokenRefreshView(TokenRefreshView):
     permission_classes = (permissions.AllowAny,)
 
-    
+
+class CustomerCreateListView(generics.ListCreateAPIView):
+    serializer_class = CustomerSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = Customer.objects.all()
+
+class CustomerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = CustomerSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = Customer.objects.all()    
