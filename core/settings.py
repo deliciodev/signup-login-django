@@ -128,7 +128,7 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ('Bearer',),
-    "UPATE_LAST_LOGIN": True,
+    "UPDATE_LAST_LOGIN": True,
 }
 
 CORS_ALLOW_CREDENTIALS = False
@@ -141,6 +141,6 @@ if DEBUG:
 
 #Auth backends - allow login with email or username
 AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
     "customers.backends.EmailOrUsernameModelBackend",
+    "django.contrib.auth.backends.ModelBackend",
 ]
