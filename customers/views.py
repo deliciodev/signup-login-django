@@ -79,7 +79,7 @@ class CustomerCreateListView(generics.ListCreateAPIView):
     queryset = Customer.objects.all().order_by('created_at')
 
     def get_permissions(self):
-        if self.request.method == "POST":
+        if self.request.method  in ("GET", "POST"):
             return [permissions.IsAdminUser()]
         return super().get_permissions()
 

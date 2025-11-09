@@ -31,7 +31,7 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ['id', 'username', 'email', 'name', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'email', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'email', 'created_at', 'updated_at', 'username']
 
 class CustomerLoginSerializer(serializers.Serializer):
     identifier = serializers.CharField(help_text="Email or Username")

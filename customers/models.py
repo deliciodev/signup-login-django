@@ -26,6 +26,7 @@ class CustomerManager(BaseUserManager):
         # Provide a default username if not supplied
         extra_fields.setdefault("username", (email or "").split("@")[0] or "admin")
 
+        extra_fields.setdefault("name", extra_fields.get("username"))
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
@@ -59,8 +60,8 @@ class Customer(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = "Customers"
 
     def __str__(self):
-        return self.name
+        return self.name or self.username or self.email
     
     def get_name(self):
-        return f"{self.name}"
+        return f"{self.name or self.username or self.email}"
 

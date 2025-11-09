@@ -132,12 +132,9 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOW_CREDENTIALS = False
-CORS_ALLOW_ALL_ORIGINS = [
-    #put web frontends here
-    
-]
-if DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = bool(DEBUG)
+# For prod, set explicit list:
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if not DEBUG else []
 
 #Auth backends - allow login with email or username
 AUTHENTICATION_BACKENDS = [
