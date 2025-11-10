@@ -10,7 +10,8 @@ SECRET_KEY = 'django-insecure-i7=()!b%h7*f7-dgma-p*&@&%o)uzj$fquc+2c+_a0m2k3ou&k
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -26,6 +27,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
 
     'customers',
 ]
@@ -120,6 +123,19 @@ REST_FRAMEWORK = {
     "DEFAULT_PARSER_CLASSES": (
         "rest_framework.parsers.JSONParser",
     ),
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "10/min",
+        "user": "60/min",
+    },
+
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
 }
 
 SIMPLE_JWT = {
@@ -131,7 +147,7 @@ SIMPLE_JWT = {
     "UPDATE_LAST_LOGIN": True,
 }
 
-CORS_ALLOW_CREDENTIALS = False
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = bool(DEBUG)
 # For prod, set explicit list:
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if not DEBUG else []
@@ -141,3 +157,14 @@ AUTHENTICATION_BACKENDS = [
     "customers.backends.EmailOrUsernameModelBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Signup, Login and Logout API",
+    "DESCRIPTION": "API for managing customers with JWT authentication",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+
+    "SWAGGER_UI_DIST": "SIDECAR",
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
+}
