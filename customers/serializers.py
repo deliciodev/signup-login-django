@@ -11,6 +11,7 @@ class CustomerRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ['id', 'username', 'email', 'password', 'password_confirm', 'name']
+        ref_name = "CustomerRegistration"
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password_confirm']:
@@ -26,13 +27,14 @@ class CustomerRegistrationSerializer(serializers.ModelSerializer):
         return Customer.objects.create_user(**validated_data)
     
 class CustomerSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(source='get_name', read_only=True)
-
     class Meta:
         model = Customer
         fields = ['id', 'username', 'email', 'name', 'created_at', 'updated_at']
         read_only_fields = ['id', 'email', 'created_at', 'updated_at', 'username']
-
+        ref_name = "Customer"
 class CustomerLoginSerializer(serializers.Serializer):
     identifier = serializers.CharField(help_text="Email or Username")
     password = serializers.CharField(write_only=True, style={'input_type': 'password'})
+
+    class Meta:
+        ref_name = "CustomerLogin"

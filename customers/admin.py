@@ -5,7 +5,7 @@ from .models import Customer
 @admin.register(Customer)
 class CustomerAdmin(BaseUserAdmin):
     ordering = ("created_at",)
-    list_display = ("email", "username", "name", "is_active", "is_staff", "created_at")
+    list_display = ("email", "username", "name", "id", "is_active", "is_staff", "created_at")
     search_fields = ("email", "username", "name")
 
     fieldsets = (
