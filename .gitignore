@@ -1,4 +1,9 @@
 venv/
-db.splite3
+db.sqlite3
 
 .env
+readme.md
+
+*.sqlite3
+*.pyc
+__pycache__/
