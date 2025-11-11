@@ -160,7 +160,7 @@ AUTHENTICATION_BACKENDS = [
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Signup, Login and Logout API",
-    "DESCRIPTION": "API for managing customers with JWT authentication",
+    "DESCRIPTION": "API for managing customers with signup, login, and logout functionality.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 
